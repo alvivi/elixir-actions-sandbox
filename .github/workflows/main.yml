@@ -1,15 +1,14 @@
-on: [push]
+on: push
 
 jobs:
-  hello_world_job:
+  test:
     runs-on: ubuntu-latest
-    name: A job to say hello
     steps:
-    - name: Hello world action step
-      id: hello
-      uses: alvivi/hello-world-javascript-action@v1
-      with:
-        who-to-greet: 'Pepo the dev'
-    # Use the output from the `hello` step
-    - name: Get the output time
-      run: echo "The time was ${{ steps.hello.outputs.time }}"
+      - uses: actions/checkout@v2
+      - uses: actions/setup-elixir@v1
+        with:
+          otp-version: 22.2
+          elixir-version: 1.10.1
+      - run: mix deps.get
+      - run: mix test
+      - uses: alvivi/hello-world-javascript-action@master
